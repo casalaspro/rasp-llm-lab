@@ -10,6 +10,9 @@ obj/
 *.user
 *.suo
 
+# SSH keys
+.ssh/
+
 # Publish folders
 */publish/
 
