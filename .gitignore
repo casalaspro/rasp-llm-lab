@@ -1,0 +1,28 @@
+# .NET build folders
+bin/
+obj/
+
+# VS Code settings
+.vscode/
+.vs/
+
+# User-specific files
+*.user
+*.suo
+
+# Publish folders
+*/publish/
+
+# Node modules (per futuro frontend)
+node_modules/
+
+# Docker artifacts
+*.tar
+
+# Logs
+logs/
+*.log
+
+# Temp files
+*.tmp
+*.temp
