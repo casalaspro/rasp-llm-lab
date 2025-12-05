@@ -9,3 +9,5 @@
 - Web frontend (coming soon)
 
 - Audio integration with WM8960 (future step)
+
+This project follows the combined practice of continuous integration and continuous deployment.
