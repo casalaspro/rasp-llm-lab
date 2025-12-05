@@ -2,7 +2,8 @@ name: CD - Deploy to Raspberry Pi
 
 on:
   push:
-    branches: [ main ]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   deploy:
@@ -26,6 +27,16 @@ jobs:
           username: ${{ secrets.RPI_USER }}
           key: ${{ secrets.RPI_SSH_KEY }}
           script: |
+            set -e
             cd ~/rasp-llm-lab
-            git pull
+
+            git fetch --all --tags
+
+            git checkout $GITHUB_REF_NAME
+
+            VERSION="$GITHUB_REF_NAME"
+            echo "$VERSION" > VERSION
+
+            echo "Deploying version: $VERSION"
+
             ./deploy.sh
