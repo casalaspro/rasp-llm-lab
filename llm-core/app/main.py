@@ -1,27 +1,33 @@
+"""
+LLM Core Service
+
+A FastAPI-based service for text generation using Language Models.
+Currently provides mock responses for testing pipeline integration.
+"""
+
 from fastapi import FastAPI
-from pydantic import BaseModel
+from app.config import settings
+from app.routes import router
 
-app = FastAPI()
+# Create FastAPI application
+app = FastAPI(
+    title=settings.app_name,
+    version=settings.app_version,
+    description="Language Model Core Service for text generation",
+    debug=settings.debug
+)
 
-
-class GenerateRequest(BaseModel):
-    prompt: str
-
-
-class GenerateResponse(BaseModel):
-    completion: str
-
-
-@app.get("/")
-def root():
-    return {"status": "ok", "service": "llm-core"}
+# Include API routes
+app.include_router(router)
 
 
-@app.post("/generate", response_model=GenerateResponse)
-def generate(req: GenerateRequest):
-    """
-    Fake LLM: it returns just the fake message just
-    to test pipeline between services.
-    """
-    fake_reply = f"[MOCK LLM] I received: {req.prompt}"
-    return GenerateResponse(completion=fake_reply)
+if __name__ == "__main__":
+    import uvicorn
+    
+    uvicorn.run(
+        "app.main:app",
+        host=settings.host,
+        port=settings.port,
+        reload=settings.debug,
+        log_level=settings.log_level
+    )
