@@ -6,3 +6,9 @@ services:
     container_name: llm-api
     ports:
       - "8080:8080"
+
+  llm-core:
+    build: ./llm-core
+    container_name: llm-core
+    ports:
+      - "8001:8001"
