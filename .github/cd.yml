@@ -1,0 +1,24 @@
+name: CD - Deploy to Raspberry Pi
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Raspberry via SSH
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.RPI_HOST }}
+          username: ${{ secrets.RPI_USER }}
+          key: ${{ secrets.RPI_SSH_KEY }}
+          script: |
+            cd ~/rasp-llm-lab
+            git pull
+            ./deploy.sh
