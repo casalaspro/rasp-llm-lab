@@ -11,3 +11,5 @@
 - Audio integration with WM8960 (future step)
 
 This project follows the combined practice of continuous integration and continuous deployment.
+
+New Test.
