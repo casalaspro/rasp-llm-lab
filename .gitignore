@@ -29,3 +29,20 @@ logs/
 # Temp files
 *.tmp
 *.temp
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.python-version
+*.egg-info/
+dist/
+build/
