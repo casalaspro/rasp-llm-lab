@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException
 from app.models import GenerateRequest, GenerateResponse, HealthResponse
 from app.config import settings
 from app.llm_client import generate_with_llm
+from app.speak import speak
 import httpx
 
 # Create router instance
@@ -59,10 +60,10 @@ def generate_text(request: GenerateRequest):
     tramite llama.cpp HTTP server.
     """
     try:
-        # Costruisci prompt nel formato Gemma
+        # Build prompt for Gemma
         prompt = build_gemma_prompt(request.prompt)
 
-        # Parametri di generazione con default sensati
+        # Parameters for LLM server
         n_predict = request.max_tokens or 256
         temperature = request.temperature if request.temperature is not None else 0.4
 
@@ -79,7 +80,7 @@ def generate_text(request: GenerateRequest):
             ]
         }
 
-        # Chiamata al server llama.cpp
+        # Call to llama.cpp server
         response = httpx.post(
             settings.llm_base_url.rstrip("/") + "/completion",
             json=payload,
@@ -93,7 +94,7 @@ def generate_text(request: GenerateRequest):
             )
 
         data = response.json()
-        # /completion restituisce il testo nel campo "content" secondo README di llama-server 
+        # /completion gives back {"content": "...", ...}
         completion_text = (data.get("content") or "").strip()
 
         if not completion_text:
@@ -101,6 +102,12 @@ def generate_text(request: GenerateRequest):
                 status_code=500,
                 detail="LLM server returned empty completion"
             )
+        
+        # Text-to-Speech (does not block the response)
+        try:
+            speak(completion_text, 1.2, 16000)
+        except Exception as tts_error:
+            print(f"[TTS] Errore durante la sintesi vocale: {tts_error}") # we just log the error without blocking the response
 
         return GenerateResponse(
             completion=completion_text,
