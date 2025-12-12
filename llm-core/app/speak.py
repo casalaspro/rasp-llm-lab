@@ -21,7 +21,7 @@ def speak(text: str):
     # echo "testo" | piper --model ... --output_raw | aplay ...
     cmd = (
         f'echo "{text}" '
-        f'| "{PIPER_BINARY}" --model "{PIPER_MODEL}" --output_raw '
+        f'| "{PIPER_BINARY}" --model "{PIPER_MODEL}" --length_scale 0.8 --output_raw '
         f'| aplay -r 22050 -f S16_LE -t raw -'
     )
 
