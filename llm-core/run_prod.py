@@ -14,14 +14,14 @@ os.environ["APP_ENV"] = "prod"
 
 
 def load_env():
-    """Load environment variables from env.prod"""
-    env_file = Path("env.prod")
+    """Load environment variables from .env.prod"""
+    env_file = Path(".env.prod")
 
     if env_file.exists():
         load_dotenv(env_file)
         print(f"📋 Loaded environment from {env_file}")
     else:
-        print("❌ env.prod not found!")
+        print("❌ .env.prod not found!")
         sys.exit(1)
 
 

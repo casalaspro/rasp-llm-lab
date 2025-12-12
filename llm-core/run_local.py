@@ -14,14 +14,14 @@ os.environ["APP_ENV"] = "local"
 
 
 def load_env():
-    """Load environment variables from env.local"""
+    """Load environment variables from .env.local"""
     env_file = Path(".env.local")
 
     if env_file.exists():
         load_dotenv(env_file)
         print(f"📋 Loaded environment from {env_file}")
     else:
-        print("❌ env.local not found!")
+        print("❌ .env.local not found!")
         sys.exit(1)
 
 
