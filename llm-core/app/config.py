@@ -7,11 +7,20 @@ import os
 from typing import Optional
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
+from pathlib import Path
 
+# read wich env to use: the default is "local"
+env_name = os.getenv("APP_ENV", "local")
 
-# Load environment variables from .env file
-load_dotenv()
+# use a specific .env file based on the environment
+env_file = f"env.{env_name}"
 
+# if the file exists, load it
+if Path(env_file).exists():
+    load_dotenv(env_file)
+else:
+    # Fallback optional: try to load a generic .env if it exists
+    load_dotenv(".env")
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
@@ -34,6 +43,9 @@ class Settings(BaseSettings):
     llm_api_key: Optional[str] = None
     llm_max_tokens: Optional[int] = 1000
     llm_temperature: Optional[float] = 0.7
+    #  Server Llama.cpp settings
+    llm_base_url: str = "http://127.0.0.1:8080"
+    
     
     class Config:
         """Pydantic configuration."""

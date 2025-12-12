@@ -1,11 +1,11 @@
 # ==============================================
-# llm-core - Avvio ambiente locale (development)
-# Uso:  .\start-local.ps1
+# llm-core - Avvio ambiente produzione
+# Uso:  .\start-production.ps1
 # ==============================================
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "🔧 llm-core - Local Development Server" -ForegroundColor Cyan
+Write-Host "🏭 llm-core - Production Server" -ForegroundColor Cyan
 Write-Host ("=" * 50) -ForegroundColor Cyan
 
 function Load-EnvFile {
@@ -38,27 +38,24 @@ if (-not (Test-Path "app\main.py")) {
     exit 1
 }
 
-# 2) Carica env locale
-$envFile = ".env.local"
+# 2) Carica env di produzione
+$envFile = ".env.production"
 Load-EnvFile -Path $envFile
 
-# 3) Installa dipendenze (se vuoi, puoi rimuoverlo dopo la prima volta)
-Write-Host "📦 Installazione dipendenze (requirements.txt)..." -ForegroundColor Blue
+# 3) (Opzionale) installa dipendenze - in produzione spesso lo fai solo in fase deploy
+Write-Host "📦 Controllo dipendenze..." -ForegroundColor Blue
 python -m pip install -r requirements.txt
 
-# 4) Leggi alcune info per log
-$host_addr = if ($env:HOST) { $env:HOST } else { "127.0.0.1" }
+# 4) Leggi configurazione
+$host_addr = if ($env:HOST) { $env:HOST } else { "0.0.0.0" }
 $port      = if ($env:PORT) { $env:PORT } else { "8001" }
 $log_level = if ($env:LOG_LEVEL) { $env:LOG_LEVEL } else { "info" }
-$debug     = if ($env:DEBUG) { $env:DEBUG.ToLower() -eq "true" } else { $true }
 
-Write-Host "🚀 Avvio server su http://$host_addr`:$port" -ForegroundColor Green
-Write-Host "📄 Docs: http://$host_addr`:$port/docs" -ForegroundColor Green
-Write-Host "🔄 Auto-reload: $(if ($debug) { 'Enabled' } else { 'Disabled' })" -ForegroundColor Green
+Write-Host "🚀 Avvio server PRODUZIONE su http://$host_addr`:$port" -ForegroundColor Green
 Write-Host "📝 Log level: $log_level" -ForegroundColor Green
 Write-Host ("=" * 50) -ForegroundColor Cyan
 
-# 5) Avvia uvicorn (come nel tuo main.py / run_local.py)
+# 5) Avvia uvicorn SENZA reload
 $cmd = @(
     "python", "-m", "uvicorn",
     "app.main:app",
@@ -66,10 +63,6 @@ $cmd = @(
     "--port", $port,
     "--log-level", $log_level
 )
-
-if ($debug) {
-    $cmd += "--reload"
-}
 
 try {
     & $cmd[0] $cmd[1..($cmd.Length-1)]
