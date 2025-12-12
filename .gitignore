@@ -45,3 +45,5 @@ ENV/
 *.egg-info/
 dist/
 build/
+
+!.env.prod
