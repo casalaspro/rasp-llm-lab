@@ -2,7 +2,7 @@ import subprocess
 import textwrap
 
 # 🔧 CONTROLLA questi path
-PIPER_BINARY = "/home/cagliostro88/piper/piper"
+PIPER_BINARY = "/home/cagliostro88/piper/piper/piper"
 PIPER_MODEL = "/home/cagliostro88/piper/piper/it_IT-riccardo-x_low.onnx"
 
 def speak(text: str):
