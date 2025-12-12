@@ -1,13 +1,16 @@
+using llm_api.Configuration;
+using llm_api.Endpoints;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddLlmCoreHttpClient(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddLlmCoreHttpClient(builder.Configuration);
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,12 +19,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/chat", () =>
-{
-    var message = "Hi everybody! I'm here!";
-    return message;
-})
-.WithName("LLM APIs")
-.WithOpenApi();
+app.MapGet("/", () => "Hello from llm-api in Docker!");
+
+app.MapChatEndpoints();
 
 app.Run();
